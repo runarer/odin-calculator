@@ -25,6 +25,7 @@ let secondNumber = 0;
 const outputDisplay = document.querySelector(".display");
 const digitButtons = document.querySelectorAll(".digit-button");
 const operatorButtons = document.querySelectorAll(".operator-button");
+const equalButton = document.querySelector(".equal-button");
 
 function operator(num1, operand, num2) {
     if (operand === "+") return add(num1,num2);
@@ -54,11 +55,17 @@ function addOperator(operand) {
     }
 }
 
-//add eventlisteners to digit buttons
+function equals() {
+    if (firstNumber === undefined || op === undefined) return;
+    secondNumber = operator(firstNumber,op,secondNumber);
+    op = undefined;
+    outputDisplay.textContent = secondNumber;
+}
+
 digitButtons.forEach( 
     digitButton => digitButton.addEventListener("click",
         () => addDigit( parseInt(digitButton.textContent))));
 
-//add evnetlisteners to operator buttons.
-// When clicking operator; firstNumber == secondNumber
 operatorButtons.forEach(button => button.addEventListener("click",() => addOperator(button.textContent)));
+
+equalButton.addEventListener("click",equals);
