@@ -113,7 +113,7 @@ const digitButtons = document.querySelectorAll(".digit-button");
 const operatorButtons = document.querySelectorAll(".operator-button");
 const equalButton = document.querySelector(".equal-button");
 const clearButton = document.querySelector(".clear-button");
-const seperatorButton = document.querySelector(".seperator-button");
+const separatorButton = document.querySelector(".separator-button");
 const backButton = document.querySelector(".back-button");
 
 
@@ -125,59 +125,61 @@ operatorButtons.forEach(button => button.addEventListener("click",() => addOpera
 
 equalButton.addEventListener("click",equals);
 clearButton.addEventListener("click",clear);
-seperatorButton.addEventListener("click",addSeperator);
+separatorButton.addEventListener("click",addSeperator);
 backButton.addEventListener("click",removeLast);
 
 window.addEventListener("keydown",function(e) {
     // console.log(displayNumber)
     switch(e.code) {
         case "Digit0":;
-        case "0": addDigit("0");
+        case "Numpad0": addDigit("0");
             break;
         case "Digit1":;
-        case "1": addDigit("1");
+        case "Numpad1": addDigit("1");
             break;
         case "Digit2":;
-        case "2": addDigit("2");
+        case "Numpad2": addDigit("2");
             break;
         case "Digit3":;
-        case "d3": addDigit("3");
+        case "Numpad3": addDigit("3");
             break;
         case "Digit4":;
-        case "4": addDigit("4");
+        case "Numpad4": addDigit("4");
             break;
         case "Digit5":;
-        case "5": addDigit("5");
+        case "Numpad5": addDigit("5");
             break;
         case "Digit6":;
-        case "6": addDigit("6");
+        case "Numpad6": addDigit("6");
             break;
         case "Digit7":;
-        case "7": addDigit("7");
+        case "Numpad7": addDigit("7");
             break;
         case "Digit8":;
-        case "8": addDigit("8");
+        case "Numpad8": addDigit("8");
             break;
         case "Digit9":;
-        case "9": addDigit("9");
+        case "Numpad9": addDigit("9");
             break;
+        case "NumpadEnter":
         case "Enter": equals();
             break;
         case "Backspace": removeLast();
             break;
         case "KeyC": clear();
             break;
-        case "Separator": seperatorButton();
+        case "NumpadDecimal": separatorButton();
             break;
-        case "Add": addOperator("+")
+        case "NumpadAdd": addOperator("+")
             break;
-        case "Subtract": addOperator("-")
+        case "NumpadSubtract": addOperator("-")
             break;
-        case "Divide": addOperator("/")
+        case "NumpadDivide": addOperator("/")
             break;
-        case "Multiply": addOperator("*")
+        case "NumpadMultiply": addOperator("*")
             break;
         default:
+            console.log(e.code);
             break;
     }
 
