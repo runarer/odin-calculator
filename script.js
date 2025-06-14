@@ -19,13 +19,15 @@ function divide(a,b) {
 
 let firstNumber = undefined;
 let op = undefined;
-let secondNumber = 0;
-//let displayNumber = 0;
+let secondNumber = undefined;
+let displayNumber = "";
+let answer = undefined;
 
 const outputDisplay = document.querySelector(".display");
 const digitButtons = document.querySelectorAll(".digit-button");
 const operatorButtons = document.querySelectorAll(".operator-button");
 const equalButton = document.querySelector(".equal-button");
+const clearButton = document.querySelector(".clear-button");
 
 function operator(num1, operand, num2) {
     if (operand === "+") return add(num1,num2);
@@ -36,36 +38,61 @@ function operator(num1, operand, num2) {
 }
 
 function addDigit(digit) {
-    // Move digits over, the add new digit at end
-    secondNumber *= 10;
-    secondNumber += digit;
-    outputDisplay.textContent = secondNumber;
+    if( answer !== undefined) {
+        answer = undefined;
+        displayNumber = digit;
+    } else if (displayNumber === "0")  {
+        displayNumber = digit;        
+    } else {
+        displayNumber += digit;
+    }    
+    outputDisplay.textContent = displayNumber;
 }
 
 function addOperator(operand) {
-    if(op === undefined) {
-        firstNumber = secondNumber;
+    if(firstNumber === undefined) {
+        firstNumber = parseFloat(displayNumber);
+        displayNumber = "";
+    } 
+    
+    if(displayNumber === "" || op === undefined) {
         op = operand;
-        secondNumber = 0;
-    } else {
+    } 
+    else {
+        secondNumber = parseFloat(displayNumber);
         firstNumber = operator(firstNumber,op,secondNumber);
         op = operand;
-        secondNumber = 0;
+        secondNumber  = undefined;
+
         outputDisplay.textContent = firstNumber;
-    }
+        displayNumber = ""
+    }    
 }
 
 function equals() {
-    if (firstNumber === undefined || op === undefined) return;
-    secondNumber = operator(firstNumber,op,secondNumber);
+    if (firstNumber === undefined || op === undefined || displayNumber === "") return;
+    
+    secondNumber = parseFloat(displayNumber);
+    answer = operator(firstNumber,op,secondNumber);
+    clear();
+
+    displayNumber = answer
+    outputDisplay.textContent = displayNumber;
+}
+
+function clear() {
+    firstNumber = undefined;
     op = undefined;
-    outputDisplay.textContent = secondNumber;
+    secondNumber = undefined;
+    displayNumber = 0;
+    outputDisplay.textContent = displayNumber;
 }
 
 digitButtons.forEach( 
     digitButton => digitButton.addEventListener("click",
-        () => addDigit( parseInt(digitButton.textContent))));
+        () => addDigit( digitButton.textContent)));
 
 operatorButtons.forEach(button => button.addEventListener("click",() => addOperator(button.textContent)));
 
 equalButton.addEventListener("click",equals);
+clearButton.addEventListener("click",clear);
