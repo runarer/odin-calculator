@@ -65,7 +65,7 @@ function addOperator(operand) {
         op = operand;
         secondNumber  = undefined;
 
-        outputDisplay.textContent = firstNumber;
+        outputDisplay.textContent = parseFloat(firstNumber.toFixed(5)); // 1
         displayNumber = ""
     }    
 }
@@ -78,7 +78,7 @@ function equals() {
     clear();
 
     displayNumber = answer
-    outputDisplay.textContent = displayNumber;
+    outputDisplay.textContent = parseFloat(displayNumber.toFixed(5)); // 2
 }
 
 function clear() {
