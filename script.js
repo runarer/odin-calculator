@@ -17,20 +17,13 @@ function divide(a,b) {
     return a/b;
 }
 
+let input = undefined;
+let output = 0;
+
 let firstNumber = undefined;
-let op = undefined;
 let secondNumber = undefined;
-let displayNumber = "";
+let op = undefined;
 let answer = undefined;
-
-const outputDisplay = document.querySelector(".display");
-const digitButtons = document.querySelectorAll(".digit-button");
-const operatorButtons = document.querySelectorAll(".operator-button");
-const equalButton = document.querySelector(".equal-button");
-const clearButton = document.querySelector(".clear-button");
-const seperatorButton = document.querySelector(".seperator-button");
-const backButton = document.querySelector(".back-button");
-
 
 function operator(num1, operand, num2) {
     if (operand === "+") return add(num1,num2);
@@ -40,76 +33,89 @@ function operator(num1, operand, num2) {
     else return NaN;    
 }
 
-function addDigit(digit) {
-    if( answer !== undefined) {
-        answer = undefined;
-        displayNumber = digit;
-    } else if (displayNumber === "0")  {
-        displayNumber = digit;        
-    } else {
-        displayNumber += digit;
-    }    
-    outputDisplay.textContent = displayNumber;
-}
-
 function addOperator(operand) {
-    if(firstNumber === undefined) {
-        firstNumber = parseFloat(displayNumber);
-        displayNumber = "";
-    } 
+    if (input !== undefined)
+    {
+        // We have part of equation
+        if(firstNumber === undefined) {
+            firstNumber = parseFloat(input);
+            input = undefined;
+            answer = undefined;
+        } else {
+            // We have second part and a new operator.
+            equals()
+        } 
+    }
     
-    if(displayNumber === "" || op === undefined) {
-        op = operand;
-    } 
-    else {
-        secondNumber = parseFloat(displayNumber);
-        firstNumber = operator(firstNumber,op,secondNumber);
-        op = operand;
-        secondNumber  = undefined;
+    //We have no input, but may have a previous answer
+    if (answer !== undefined) {
+        firstNumber = answer
 
-        outputDisplay.textContent = parseFloat(firstNumber.toFixed(5)); // 1
-        displayNumber = ""
     }    
+    
+    op = operand
 }
 
 function equals() {
-    if (firstNumber === undefined || op === undefined || displayNumber === "") return;
-    
-    secondNumber = parseFloat(displayNumber);
-    answer = operator(firstNumber,op,secondNumber);
-    clear();
+    if(firstNumber !== undefined && op !== undefined && input !== undefined) {
+        secondNumber = parseFloat(input);
+        
+        const tempAnswer = operator(firstNumber,op,secondNumber);
+        
+        clear();
+        
+        answer = tempAnswer;
 
-    displayNumber = answer
-    outputDisplay.textContent = parseFloat(displayNumber.toFixed(5)); // 2
+        output = parseFloat(answer.toFixed(5));
+        outputDisplay.textContent = output;
+    }
 }
 
 function clear() {
     firstNumber = undefined;
     op = undefined;
     secondNumber = undefined;
-    displayNumber = "0";
-    outputDisplay.textContent = displayNumber;
+    input = undefined;
+    output = "0";
+    outputDisplay.textContent = output;
+}
+
+
+function addDigit(digit) {
+    if (input === undefined || input === "0") {
+        input = digit;
+    } else {
+        input += digit;
+    }
+
+    output = input
+    outputDisplay.textContent = output;
 }
 
 function addSeperator() {
-    if (!displayNumber.includes('.')) {
-        displayNumber += '.'
-        outputDisplay.textContent = displayNumber;
+    if(input !== undefined && !input.includes('.')) {
+        input += '.';
+        output = input
+        outputDisplay.textContent = output;
     }
 }
 
 function removeLast() {
-    if (outputDisplay.textContent.length > 0) {
-        outputDisplay.textContent = outputDisplay.textContent.slice(0,-1);
-        if (outputDisplay.textContent.length < 1) {
-            outputDisplay.textContent = 0;
-            displayNumber = 0;
-        } else {
-            displayNumber = parseFloat(outputDisplay.textContent);
-        }
-
+    if(input !== undefined && input.length > 0) {
+        input = input.slice(0,-1);
+        output = (input.length < 1) ? "0" : input;
+        outputDisplay.textContent = output;
     }
 }
+
+const outputDisplay = document.querySelector(".display");
+const digitButtons = document.querySelectorAll(".digit-button");
+const operatorButtons = document.querySelectorAll(".operator-button");
+const equalButton = document.querySelector(".equal-button");
+const clearButton = document.querySelector(".clear-button");
+const seperatorButton = document.querySelector(".seperator-button");
+const backButton = document.querySelector(".back-button");
+
 
 digitButtons.forEach( 
     digitButton => digitButton.addEventListener("click",
@@ -121,3 +127,58 @@ equalButton.addEventListener("click",equals);
 clearButton.addEventListener("click",clear);
 seperatorButton.addEventListener("click",addSeperator);
 backButton.addEventListener("click",removeLast);
+
+window.addEventListener("keydown",function(e) {
+    // console.log(displayNumber)
+    switch(e.code) {
+        case "Digit0":;
+        case "0": addDigit("0");
+            break;
+        case "Digit1":;
+        case "1": addDigit("1");
+            break;
+        case "Digit2":;
+        case "2": addDigit("2");
+            break;
+        case "Digit3":;
+        case "d3": addDigit("3");
+            break;
+        case "Digit4":;
+        case "4": addDigit("4");
+            break;
+        case "Digit5":;
+        case "5": addDigit("5");
+            break;
+        case "Digit6":;
+        case "6": addDigit("6");
+            break;
+        case "Digit7":;
+        case "7": addDigit("7");
+            break;
+        case "Digit8":;
+        case "8": addDigit("8");
+            break;
+        case "Digit9":;
+        case "9": addDigit("9");
+            break;
+        case "Enter": equals();
+            break;
+        case "Backspace": removeLast();
+            break;
+        case "KeyC": clear();
+            break;
+        case "Separator": seperatorButton();
+            break;
+        case "Add": addOperator("+")
+            break;
+        case "Subtract": addOperator("-")
+            break;
+        case "Divide": addOperator("/")
+            break;
+        case "Multiply": addOperator("*")
+            break;
+        default:
+            break;
+    }
+
+});
