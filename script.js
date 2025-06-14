@@ -28,6 +28,7 @@ const digitButtons = document.querySelectorAll(".digit-button");
 const operatorButtons = document.querySelectorAll(".operator-button");
 const equalButton = document.querySelector(".equal-button");
 const clearButton = document.querySelector(".clear-button");
+const seperatorButton = document.querySelector(".seperator-button")
 
 function operator(num1, operand, num2) {
     if (operand === "+") return add(num1,num2);
@@ -84,8 +85,16 @@ function clear() {
     firstNumber = undefined;
     op = undefined;
     secondNumber = undefined;
-    displayNumber = 0;
+    displayNumber = "0";
     outputDisplay.textContent = displayNumber;
+}
+
+function addSeperator() {
+    if (!displayNumber.includes('.')) {
+        displayNumber += '.'
+        outputDisplay.textContent = displayNumber;
+    }
+
 }
 
 digitButtons.forEach( 
@@ -96,3 +105,4 @@ operatorButtons.forEach(button => button.addEventListener("click",() => addOpera
 
 equalButton.addEventListener("click",equals);
 clearButton.addEventListener("click",clear);
+seperatorButton.addEventListener("click",addSeperator);
